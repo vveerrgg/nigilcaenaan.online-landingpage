@@ -6,6 +6,7 @@ A modern, responsive "link-in-bio" style landing page for vveerrgg.online.
 
 - Clean, minimal design
 - Responsive layout
+- Dark mode support
 - Smooth animations
 - Social media links
 - Easy to customize
