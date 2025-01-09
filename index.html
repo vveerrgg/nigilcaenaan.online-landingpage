@@ -6,6 +6,7 @@
     <title>vveerrgg | Links</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 </head>
 <body>
     <header class="header">
@@ -18,25 +19,35 @@
         <div class="profile">
             <img src="https://github.com/vveerrgg.png" alt="vveerrgg" class="avatar">
             <h1>@vveerrgg</h1>
-            <p class="bio">Developer • Creator • Tech Enthusiast</p>
+            <div class="bio-container">
+                <p class="bio">Developer • Creator • Tech Enthusiast</p>
+                <button class="qr-button" aria-label="Show Nostr QR Code">
+                    <i class="fas fa-qrcode"></i>
+                </button>
+            </div>
         </div>
 
         <div class="links">
-            <a href="https://github.com/vveerrgg" class="link-card">
+            <a href="https://primal.net/vveerrgg" class="link-card" target="_blank">
+                <i class="fas fa-bolt"></i>
+                <span>Nostr @Vveerrgg</span>
+            </a>
+            <a href="https://github.com/vveerrgg" class="link-card" target="_blank">
                 <i class="fab fa-github"></i>
-                <span>GitHub</span>
+                <span>GitHub @Vveerrgg</span>
             </a>
-            <a href="https://twitter.com/vveerrgg" class="link-card">
+            <hr>
+            <a href="https://x.com/vveerrgg" class="link-card" target="_blank">
                 <i class="fab fa-twitter"></i>
-                <span>On @X</span>
+                <span>Social: @X.com</span>
             </a>
-            <a href="https://primal.net/vveerrgg" class="link-card">
-                <i class="fab fa-twitter"></i>
-                <span>Nostr</span>
+            <a href="https://humanjava.com" class="link-card" target="_blank">
+                <i class="fas fa-book"></i>
+                <span>Articles: Humanjava Enterprises</span>
             </a>
-            <a href="https://linkedin.com/in/vveerrgg" class="link-card">
+            <a href="https://linkedin.com/in/vergelevans" class="link-card" target="_blank">
                 <i class="fab fa-linkedin"></i>
-                <span>LinkedIn</span>
+                <span>Career profile: LinkedIn</span>
             </a>
             <!--
                 <a href="mailto:contact@vveerrgg.online" class="link-card">
@@ -46,9 +57,50 @@
             -->
         </div>
     </div>
+
+    <!-- QR Code Overlay -->
+    <div class="overlay" id="qrOverlay">
+        <div class="overlay-content">
+            <button class="close-overlay">&times;</button>
+            
+            <div class="tabs">
+                <button class="tab-button active" data-tab="nostr">
+                    <i class="fas fa-bolt"></i> Nostr
+                </button>
+                <button class="tab-button" data-tab="lightning">
+                    <i class="fas fa-bolt"></i> Lightning
+                </button>
+            </div>
+
+            <div class="tab-content active" id="nostr-tab">
+                <h2>Nostr Profile</h2>
+                <div class="qr-container">
+                    <div id="nostr-qrcode"></div>
+                </div>
+                <div class="nostr-info">
+                    <p class="nostr-npub">npub: <span id="nostrNpub"></span></p>
+                    <button class="copy-button" data-copy="npub">Copy npub</button>
+                    <p class="nostr-pubkey">Pubkey: <span id="nostrPubkey"></span></p>
+                    <button class="copy-button" data-copy="pubkey">Copy Pubkey</button>
+                </div>
+            </div>
+
+            <div class="tab-content" id="lightning-tab">
+                <h2>Lightning Address</h2>
+                <div class="qr-container">
+                    <div id="lightning-qrcode"></div>
+                </div>
+                <div class="lightning-info">
+                    <p class="lightning-address">Address: <span id="lightningAddress"></span></p>
+                    <button class="copy-button" data-copy="lightning">Copy Address</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
-        <p> 2025 vveerrgg. All rights reserved.</p>
+        <p>&copy; 2025 vveerrgg. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
+    <script src="dist/bundle.js"></script>
 </body>
 </html>

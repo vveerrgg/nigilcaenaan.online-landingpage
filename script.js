@@ -21,6 +21,111 @@ function updateThemeIcon(theme) {
     themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
 }
 
+// Nostr and Lightning information
+const nostrPubkey = '0123456789abcdef'; // Replace with your actual pubkey
+const nostrNpub = 'npub1...'; // Replace with your actual npub
+const lightningAddress = 'vveerrgg@getalby.com'; // Replace with your actual lightning address
+
+// Tab functionality
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Add active class to clicked button and corresponding content
+        button.classList.add('active');
+        const tabId = `${button.dataset.tab}-tab`;
+        document.getElementById(tabId).classList.add('active');
+
+        // Generate QR code for active tab
+        if (button.dataset.tab === 'nostr') {
+            generateNostrQR();
+        } else {
+            generateLightningQR();
+        }
+    });
+});
+
+// Initialize QR codes
+function generateNostrQR() {
+    const qr = qrcode(0, 'M');
+    qr.addData(`nostr:${nostrPubkey}`);
+    qr.make();
+    document.getElementById('nostr-qrcode').innerHTML = qr.createImgTag(5);
+}
+
+function generateLightningQR() {
+    const qr = qrcode(0, 'M');
+    qr.addData(`lightning:${lightningAddress}`);
+    qr.make();
+    document.getElementById('lightning-qrcode').innerHTML = qr.createImgTag(5);
+}
+
+// Display information
+document.getElementById('nostrNpub').textContent = nostrNpub;
+document.getElementById('nostrPubkey').textContent = nostrPubkey;
+document.getElementById('lightningAddress').textContent = lightningAddress;
+
+// Nostr QR Code functionality
+const qrButton = document.querySelector('.qr-button');
+const overlay = document.getElementById('qrOverlay');
+const closeOverlay = document.querySelector('.close-overlay');
+const copyButtons = document.querySelectorAll('.copy-button');
+
+// Show overlay
+qrButton.addEventListener('click', () => {
+    overlay.classList.add('active');
+    // Generate QR code for active tab
+    const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+    if (activeTab === 'nostr') {
+        generateNostrQR();
+    } else {
+        generateLightningQR();
+    }
+});
+
+// Hide overlay
+closeOverlay.addEventListener('click', () => {
+    overlay.classList.remove('active');
+});
+
+overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+        overlay.classList.remove('active');
+    }
+});
+
+// Copy button functionality
+copyButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const type = button.dataset.copy;
+        let text;
+        switch(type) {
+            case 'npub':
+                text = nostrNpub;
+                break;
+            case 'pubkey':
+                text = nostrPubkey;
+                break;
+            case 'lightning':
+                text = lightningAddress;
+                break;
+        }
+        
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        });
+    });
+});
+
 // Add smooth scrolling for all links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
