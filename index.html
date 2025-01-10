@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-
     <script defer data-domain="vveerrgg.online" src="https://plausible.io/js/script.hash.outbound-links.js"></script>
 
     <meta charset="UTF-8">
@@ -10,6 +9,10 @@
     <!-- Primary Meta Tags -->
     <meta name="title" content="vveerrgg | Developer • Creator • Tech Enthusiast">
     <meta name="description" content="Connect with vveerrgg across the web - From Nostr to GitHub, articles, and professional networks. Developer focused on Nostr, Bitcoin, and web technologies.">
+    <meta name="author" content="vveerrgg">
+    <meta name="keywords" content="vveerrgg, developer, nostr, bitcoin, lightning network, web development, tech, blockchain">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -17,6 +20,8 @@
     <meta property="og:title" content="vveerrgg | Developer • Creator • Tech Enthusiast">
     <meta property="og:description" content="Connect with vveerrgg across the web - From Nostr to GitHub, articles, and professional networks. Developer focused on Nostr, Bitcoin, and web technologies.">
     <meta property="og:image" content="https://github.com/vveerrgg.png">
+    <meta property="og:image:alt" content="vveerrgg's profile picture">
+    <meta property="og:site_name" content="vveerrgg.online">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -24,111 +29,185 @@
     <meta property="twitter:title" content="vveerrgg | Developer • Creator • Tech Enthusiast">
     <meta property="twitter:description" content="Connect with vveerrgg across the web - From Nostr to GitHub, articles, and professional networks. Developer focused on Nostr, Bitcoin, and web technologies.">
     <meta property="twitter:image" content="https://github.com/vveerrgg.png">
+    <meta property="twitter:image:alt" content="vveerrgg's profile picture">
+    <meta name="twitter:creator" content="@vveerrgg">
 
     <!-- Theme Color for browsers -->
-    <meta name="theme-color" content="#0984e3">
+    <meta name="theme-color" content="#0984e3" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#2d3436" media="(prefers-color-scheme: dark)">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://github.com/vveerrgg.png">
+    <link rel="apple-touch-icon" href="https://github.com/vveerrgg.png">
     
-    <title>vveerrgg | Links</title>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="dist/bundle.js" as="script">
+    
+    <title>vveerrgg | Developer, Creator, and Tech Enthusiast - Connect via Nostr & Lightning Network</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 </head>
 <body>
-    <header class="header">
-        <a href="/" class="header-logo">Vveerrgg</a> Linked Profiles
-        <button class="theme-toggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
+    <header class="header" role="banner">
+        <a href="/" class="header-logo" aria-label="Home">Vveerrgg</a> 
+        <span class="header-title">Linked Profiles</span>
+        <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <i class="fas fa-moon" aria-hidden="true"></i>
         </button>
     </header>
-    <div class="container">
+    <main class="container" role="main">
         <div class="profile">
-            <img src="https://github.com/vveerrgg.png" alt="vveerrgg" class="avatar">
+            <img src="https://github.com/vveerrgg.png" 
+                 alt="vveerrgg's profile picture" 
+                 class="avatar"
+                 width="150" 
+                 height="150"
+                 loading="eager">
             <h1>@vveerrgg</h1>
             <div class="bio-container">
                 <p class="bio">Developer • Creator • Tech Enthusiast</p>
-                <button class="qr-button" aria-label="Show Nostr QR Code">
-                    <i class="fas fa-qrcode"></i>
+                <button class="qr-button" 
+                        aria-label="Show QR codes for Nostr and Lightning" 
+                        title="Show QR codes">
+                    <i class="fas fa-qrcode" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
 
-        <div class="links">
-            <a href="https://primal.net/vveerrgg" class="link-card" target="_blank">
-                <i class="fas fa-bolt"></i>
+        <nav class="links" aria-label="Social links">
+            <a href="https://primal.net/vveerrgg" 
+               class="link-card" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Visit vveerrgg on Nostr via Primal">
+                <i class="fas fa-bolt" aria-hidden="true"></i>
                 <span>Nostr @Vveerrgg</span>
             </a>
-            <a href="https://github.com/vveerrgg" class="link-card" target="_blank">
-                <i class="fab fa-github"></i>
+            <a href="https://github.com/vveerrgg" 
+               class="link-card" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Visit vveerrgg's GitHub profile">
+                <i class="fab fa-github" aria-hidden="true"></i>
                 <span>GitHub @Vveerrgg</span>
             </a>
-            <hr>
-            <a href="https://x.com/vveerrgg" class="link-card" target="_blank">
-                <i class="fab fa-twitter"></i>
+            <hr aria-hidden="true">
+            <a href="https://x.com/vveerrgg" 
+               class="link-card" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Visit vveerrgg on X (formerly Twitter)">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
                 <span>Social: @X.com</span>
             </a>
-            <a href="https://www.humanjava.com/author/vveerrgg/" class="link-card" target="_blank">
-                <i class="fas fa-book"></i>
+            <a href="https://www.humanjava.com/author/vveerrgg/" 
+               class="link-card" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Read vveerrgg's articles on Humanjava Enterprises">
+                <i class="fas fa-book" aria-hidden="true"></i>
                 <span>Articles: Humanjava Enterprises</span>
             </a>
-            <a href="https://linkedin.com/in/vergelevans" class="link-card" target="_blank">
-                <i class="fab fa-linkedin"></i>
+            <a href="https://linkedin.com/in/vergelevans" 
+               class="link-card" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Visit vveerrgg's LinkedIn profile">
+                <i class="fab fa-linkedin" aria-hidden="true"></i>
                 <span>Career profile: LinkedIn</span>
             </a>
-            <!--
-                <a href="mailto:contact@vveerrgg.online" class="link-card">
-                    <i class="fas fa-envelope"></i>
-                    <span>Email</span>
-                </a>
-            -->
-        </div>
-    </div>
+        </nav>
+    </main>
 
     <!-- QR Code Overlay -->
-    <div class="overlay" id="qrOverlay">
+    <div class="overlay" 
+         id="qrOverlay" 
+         role="dialog" 
+         aria-label="QR Code Display"
+         aria-hidden="true">
         <div class="overlay-content">
-            <button class="close-overlay">&times;</button>
+            <button class="close-overlay" 
+                    aria-label="Close QR code overlay">&times;</button>
             
-            <div class="tabs">
-                <button class="tab-button active" data-tab="nostr">
-                    <i class="fas fa-bolt"></i> Nostr
+            <div class="tabs" role="tablist">
+                <button class="tab-button active" 
+                        role="tab"
+                        aria-selected="true"
+                        aria-controls="nostr-tab"
+                        data-tab="nostr">
+                    <i class="fas fa-bolt" aria-hidden="true"></i> Nostr
                 </button>
-                <button class="tab-button" data-tab="lightning">
-                    <i class="fas fa-bolt"></i> Lightning
+                <button class="tab-button" 
+                        role="tab"
+                        aria-selected="false"
+                        aria-controls="lightning-tab"
+                        data-tab="lightning">
+                    <i class="fas fa-bolt" aria-hidden="true"></i> Lightning
                 </button>
             </div>
 
-            <div class="tab-content active" id="nostr-tab">
+            <div class="tab-content active" 
+                 id="nostr-tab" 
+                 role="tabpanel"
+                 aria-labelledby="nostr-tab">
                 <h2>Nostr Profile</h2>
-                <div class="qr-container">
+                <div class="qr-container" aria-label="Nostr QR Code">
                     <div id="nostr-qrcode"></div>
                 </div>
                 <div class="nostr-info">
                     <p class="nostr-npub">npub: <span id="nostrNpub"></span></p>
-                    <button class="copy-button" data-copy="npub">Copy npub</button>
+                    <button class="copy-button" 
+                            data-copy="npub"
+                            aria-label="Copy Nostr npub">Copy npub</button>
                     <p class="nostr-pubkey">Pubkey: <span id="nostrPubkey"></span></p>
-                    <button class="copy-button" data-copy="pubkey">Copy Pubkey</button>
+                    <button class="copy-button" 
+                            data-copy="pubkey"
+                            aria-label="Copy Nostr public key">Copy Pubkey</button>
                 </div>
             </div>
 
-            <div class="tab-content" id="lightning-tab">
+            <div class="tab-content" 
+                 id="lightning-tab" 
+                 role="tabpanel"
+                 aria-labelledby="lightning-tab">
                 <h2>Lightning Address</h2>
-                <div class="qr-container">
+                <div class="qr-container" aria-label="Lightning QR Code">
                     <div id="lightning-qrcode"></div>
                 </div>
                 <div class="lightning-info">
                     <p class="lightning-address">Address: <span id="lightningAddress"></span></p>
-                    <button class="copy-button" data-copy="lightning">Copy Address</button>
+                    <button class="copy-button" 
+                            data-copy="lightning"
+                            aria-label="Copy Lightning address">Copy Address</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>
+    <footer role="contentinfo">
         <p>&copy; 2025 vveerrgg. All rights reserved.</p>
     </footer>
-    <script src="dist/bundle.js"></script>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "vveerrgg",
+        "url": "https://vveerrgg.online",
+        "image": "https://github.com/vveerrgg.png",
+        "sameAs": [
+            "https://github.com/vveerrgg",
+            "https://x.com/vveerrgg",
+            "https://linkedin.com/in/vergelevans",
+            "https://www.humanjava.com/author/vveerrgg/"
+        ],
+        "jobTitle": "Developer",
+        "description": "Developer, Creator, and Tech Enthusiast focused on Nostr, Bitcoin, and web technologies."
+    }
+    </script>
+    <script src="dist/bundle.js" defer></script>
 </body>
 </html>
