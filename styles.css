@@ -188,6 +188,14 @@ footer {
     border-top-color: rgba(255,255,255,0.1);
 }
 
+footer a,
+footer a:visited,
+footer a:hover,
+footer a:active {
+    color: inherit;
+    text-decoration: underline;
+}
+
 .qr-button {
     background: var(--card-background);
     border: none;
