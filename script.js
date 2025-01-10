@@ -22,8 +22,8 @@ function updateThemeIcon(theme) {
 }
 
 // Nostr and Lightning information
-const nostrPubkey = '0123456789abcdef'; // Replace with your actual pubkey
-const nostrNpub = 'npub1...'; // Replace with your actual npub
+const nostrPubkey = '12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx'; // Replace with your actual pubkey
+const nostrNpub = 'npub12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx'; // Replace with your actual npub
 const lightningAddress = 'vveerrgg@getalby.com'; // Replace with your actual lightning address
 
 // Tab functionality
@@ -53,7 +53,7 @@ tabButtons.forEach(button => {
 // Initialize QR codes
 function generateNostrQR() {
     const qr = qrcode(0, 'M');
-    qr.addData(`nostr:${nostrPubkey}`);
+    qr.addData(`https://njump.me/${nostrNpub}`);
     qr.make();
     document.getElementById('nostr-qrcode').innerHTML = qr.createImgTag(5);
 }

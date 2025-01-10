@@ -1,3 +1,4 @@
+import qrcode from 'qrcode-generator';
 import { SimplePool, nip19 } from 'nostr-tools';
 
 // Theme toggle functionality
@@ -23,8 +24,113 @@ function updateThemeIcon(theme) {
     themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
 }
 
+// Nostr and Lightning information
+const nostrPubkey = '12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx';
+const nostrNpub = 'npub12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx';
+const lightningAddress = 'vveerrgg@getalby.com';
+
+// Tab functionality
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Add active class to clicked button and corresponding content
+        button.classList.add('active');
+        const tabId = `${button.dataset.tab}-tab`;
+        document.getElementById(tabId).classList.add('active');
+
+        // Generate QR code for active tab
+        if (button.dataset.tab === 'nostr') {
+            generateNostrQR();
+        } else {
+            generateLightningQR();
+        }
+    });
+});
+
+// Initialize QR codes
+function generateNostrQR() {
+    const qr = qrcode(0, 'M');
+    qr.addData(`https://njump.me/${nostrNpub}`);
+    qr.make();
+    document.getElementById('nostr-qrcode').innerHTML = qr.createImgTag(5);
+}
+
+function generateLightningQR() {
+    const qr = qrcode(0, 'M');
+    qr.addData(`lightning:${lightningAddress}`);
+    qr.make();
+    document.getElementById('lightning-qrcode').innerHTML = qr.createImgTag(5);
+}
+
+// Display information
+document.getElementById('nostrNpub').textContent = nostrNpub;
+document.getElementById('nostrPubkey').textContent = nostrPubkey;
+document.getElementById('lightningAddress').textContent = lightningAddress;
+
+// Nostr QR Code functionality
+const qrButton = document.querySelector('.qr-button');
+const overlay = document.getElementById('qrOverlay');
+const closeOverlay = document.querySelector('.close-overlay');
+const copyButtons = document.querySelectorAll('.copy-button');
+
+// Show overlay
+qrButton.addEventListener('click', () => {
+    overlay.classList.add('active');
+    // Generate QR code for active tab
+    const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+    if (activeTab === 'nostr') {
+        generateNostrQR();
+    } else {
+        generateLightningQR();
+    }
+});
+
+// Hide overlay
+closeOverlay.addEventListener('click', () => {
+    overlay.classList.remove('active');
+});
+
+overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+        overlay.classList.remove('active');
+    }
+});
+
+// Copy button functionality
+copyButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const type = button.dataset.copy;
+        let textToCopy = '';
+        
+        switch(type) {
+            case 'npub':
+                textToCopy = nostrNpub;
+                break;
+            case 'pubkey':
+                textToCopy = nostrPubkey;
+                break;
+            case 'lightning':
+                textToCopy = lightningAddress;
+                break;
+        }
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        });
+    });
+});
+
 // Nostr functionality
-const npub = 'npub12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx'; // Replace with your npub
 const relays = [
     'wss://relay.damus.io',
     'wss://relay.nostr.band',
@@ -34,7 +140,7 @@ const relays = [
 
 async function initNostr() {
     try {
-        const { type, data: pubkey } = nip19.decode(npub);
+        const { type, data: pubkey } = nip19.decode(nostrNpub);
         
         const pool = new SimplePool();
         
@@ -53,88 +159,16 @@ async function initNostr() {
         }
         
         // Update Nostr information
-        document.getElementById('nostrNpub').textContent = npub;
+        document.getElementById('nostrNpub').textContent = nostrNpub;
         document.getElementById('nostrPubkey').textContent = pubkey;
         
         // Generate Nostr QR code
-        generateNostrQR(pubkey);
+        generateNostrQR();
         
     } catch (error) {
         console.error('Error initializing Nostr:', error);
     }
 }
-
-// Initialize QR codes
-function generateNostrQR(pubkey) {
-    const qr = qrcode(0, 'M');
-    qr.addData(`nostr:${pubkey}`);
-    qr.make();
-    document.getElementById('nostr-qrcode').innerHTML = qr.createImgTag(5);
-}
-
-function generateLightningQR(address) {
-    if (!address) return;
-    const qr = qrcode(0, 'M');
-    qr.addData(`lightning:${address}`);
-    qr.make();
-    document.getElementById('lightning-qrcode').innerHTML = qr.createImgTag(5);
-}
-
-// Tab functionality
-const tabButtons = document.querySelectorAll('.tab-button');
-const tabContents = document.querySelectorAll('.tab-content');
-
-tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-        
-        button.classList.add('active');
-        const tabId = `${button.dataset.tab}-tab`;
-        document.getElementById(tabId).classList.add('active');
-    });
-});
-
-// QR Code functionality
-const qrButton = document.querySelector('.qr-button');
-const overlay = document.getElementById('qrOverlay');
-const closeOverlay = document.querySelector('.close-overlay');
-const copyButtons = document.querySelectorAll('.copy-button');
-
-// Show/hide overlay
-qrButton.addEventListener('click', () => {
-    overlay.classList.add('active');
-});
-
-closeOverlay.addEventListener('click', () => {
-    overlay.classList.remove('active');
-});
-
-overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-        overlay.classList.remove('active');
-    }
-});
-
-// Copy button functionality
-copyButtons.forEach(button => {
-    button.addEventListener('click', async () => {
-        const type = button.dataset.copy;
-        const text = document.getElementById(type === 'lightning' ? 'lightningAddress' : 
-                                          type === 'npub' ? 'nostrNpub' : 'nostrPubkey').textContent;
-        
-        try {
-            await navigator.clipboard.writeText(text);
-            const originalText = button.textContent;
-            button.textContent = 'Copied!';
-            setTimeout(() => {
-                button.textContent = originalText;
-            }, 2000);
-        } catch (err) {
-            console.error('Failed to copy:', err);
-        }
-    });
-});
 
 // Initialize Nostr functionality
 initNostr();
