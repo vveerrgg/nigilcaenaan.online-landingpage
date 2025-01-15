@@ -1,5 +1,7 @@
 import qrcode from 'qrcode-generator';
-import { SimplePool, nip19 } from 'nostr-tools';
+import { Buffer } from 'buffer';
+import { npubEncode } from 'nostr-crypto-utils';
+window.Buffer = Buffer;
 
 // Theme toggle functionality
 const themeToggle = document.querySelector('.theme-toggle');
@@ -26,7 +28,7 @@ function updateThemeIcon(theme) {
 
 // Nostr and Lightning information
 const nostrPubkey = '12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx';
-const nostrNpub = 'npub12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx';
+const nostrNpub = npubEncode(nostrPubkey);
 const lightningAddress = 'vveerrgg@getalby.com';
 
 // Tab functionality
@@ -102,24 +104,10 @@ overlay.addEventListener('click', (e) => {
     }
 });
 
-// Copy button functionality
+// Copy functionality
 copyButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const type = button.dataset.copy;
-        let textToCopy = '';
-        
-        switch(type) {
-            case 'npub':
-                textToCopy = nostrNpub;
-                break;
-            case 'pubkey':
-                textToCopy = nostrPubkey;
-                break;
-            case 'lightning':
-                textToCopy = lightningAddress;
-                break;
-        }
-        
+        const textToCopy = button.previousElementSibling.textContent;
         navigator.clipboard.writeText(textToCopy).then(() => {
             const originalText = button.textContent;
             button.textContent = 'Copied!';
@@ -129,46 +117,3 @@ copyButtons.forEach(button => {
         });
     });
 });
-
-// Nostr functionality
-const relays = [
-    'wss://relay.damus.io',
-    'wss://relay.nostr.band',
-    'wss://nos.lol',
-    'wss://relay.MaiQR.app'
-];
-
-async function initNostr() {
-    try {
-        const { type, data: pubkey } = nip19.decode(nostrNpub);
-        
-        const pool = new SimplePool();
-        
-        // Fetch user metadata
-        const events = await pool.list(relays, [{
-            kinds: [0],
-            authors: [pubkey]
-        }]);
-        
-        if (events.length > 0) {
-            const metadata = JSON.parse(events[0].content);
-            if (metadata.lud16) { // Lightning address
-                document.getElementById('lightningAddress').textContent = metadata.lud16;
-                generateLightningQR(metadata.lud16);
-            }
-        }
-        
-        // Update Nostr information
-        document.getElementById('nostrNpub').textContent = nostrNpub;
-        document.getElementById('nostrPubkey').textContent = pubkey;
-        
-        // Generate Nostr QR code
-        generateNostrQR();
-        
-    } catch (error) {
-        console.error('Error initializing Nostr:', error);
-    }
-}
-
-// Initialize Nostr functionality
-initNostr();

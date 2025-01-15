@@ -11,10 +11,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "assert": "^2.1.0",
+    "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
-    "nostr-tools": "^1.12.1",
+    "crypto-browserify": "^3.12.1",
+    "https-browserify": "^1.0.0",
+    "nostr-crypto-utils": "file:../nostr-crypto-utils",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "qrcode-generator": "^1.4.4",
     "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.4",
+    "util": "^0.12.5",
+    "vm-browserify": "^1.1.2",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   }
