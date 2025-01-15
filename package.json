@@ -16,7 +16,7 @@
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
     "https-browserify": "^1.0.0",
-    "nostr-crypto-utils": "file:../nostr-crypto-utils",
+    "nostr-crypto-utils": "^0.4.13",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
