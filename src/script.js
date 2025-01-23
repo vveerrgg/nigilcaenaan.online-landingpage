@@ -31,8 +31,8 @@ const nostrPubkey = '12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx
 const nostrNpub = nip19.npubEncode(nostrPubkey);
 const lightningAddress = 'nigilcaenaan@getalby.com';
 
-// Profile picture from Nostr
-async function setProfilePicture() {
+// Profile information from Nostr
+async function setProfileInfo() {
     const profileImage = document.getElementById('profile-image');
     const npub = profileImage.getAttribute('data-npub');
     
@@ -40,15 +40,45 @@ async function setProfilePicture() {
         // Convert npub to hex
         const { data: pubkey } = nip19.decode(npub);
         
-        // Use Primal API to get profile picture
+        // Use Primal API to get profile info
         const response = await fetch(`https://api.primal.net/v1/profile/${pubkey}`);
         const data = await response.json();
         
-        if (data.content?.picture) {
-            profileImage.src = `https://primal.b-cdn.net/media-cache?s=m&a=1&u=${encodeURIComponent(data.content.picture)}`;
+        if (data.content) {
+            // Set profile picture
+            if (data.content.picture) {
+                profileImage.src = `https://primal.b-cdn.net/media-cache?s=m&a=1&u=${encodeURIComponent(data.content.picture)}`;
+            }
+
+            // Set display name and username
+            const displayName = data.content.display_name || data.content.name || 'Nigil Caenaan';
+            const name = `${displayName} • @${data.content.name || 'Caenaan'}`;
+            document.getElementById('profile-name').textContent = name;
+
+            // Set bio
+            const bio = data.content.about || 'Musician • Artist • Alias of @Vveerrgg';
+            document.getElementById('profile-bio').textContent = bio;
+
+            // Update meta tags
+            const title = `${displayName} | ${bio}`;
+            document.getElementById('meta-description').content = bio;
+            document.getElementById('og-title').content = title;
+            document.getElementById('og-description').content = bio;
+            document.getElementById('twitter-title').content = title;
+            document.getElementById('twitter-description').content = bio;
+
+            // Update schema.org data
+            const schemaScript = document.querySelector('script[type="application/ld+json"]');
+            if (schemaScript) {
+                const schemaData = JSON.parse(schemaScript.textContent);
+                schemaData.name = displayName;
+                schemaData.alternateName = `@${data.content.name || 'Caenaan'}`;
+                schemaData.description = bio;
+                schemaScript.textContent = JSON.stringify(schemaData, null, 4);
+            }
         }
     } catch (error) {
-        console.error('Error fetching profile picture:', error);
+        console.error('Error fetching profile info:', error);
     }
 }
 
@@ -140,6 +170,6 @@ copyButtons.forEach(button => {
 });
 
 // Initialize
-setProfilePicture();
+setProfileInfo();
 generateNostrQR();
 generateLightningQR();
