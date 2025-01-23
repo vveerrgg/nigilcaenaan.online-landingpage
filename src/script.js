@@ -31,6 +31,27 @@ const nostrPubkey = '12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx
 const nostrNpub = nip19.npubEncode(nostrPubkey);
 const lightningAddress = 'nigilcaenaan@getalby.com';
 
+// Profile picture from Nostr
+async function setProfilePicture() {
+    const profileImage = document.getElementById('profile-image');
+    const npub = profileImage.getAttribute('data-npub');
+    
+    try {
+        // Convert npub to hex
+        const { data: pubkey } = nip19.decode(npub);
+        
+        // Use Primal API to get profile picture
+        const response = await fetch(`https://api.primal.net/v1/profile/${pubkey}`);
+        const data = await response.json();
+        
+        if (data.content?.picture) {
+            profileImage.src = `https://primal.b-cdn.net/media-cache?s=m&a=1&u=${encodeURIComponent(data.content.picture)}`;
+        }
+    } catch (error) {
+        console.error('Error fetching profile picture:', error);
+    }
+}
+
 // Tab functionality
 const tabButtons = document.querySelectorAll('.tab-button');
 const tabContents = document.querySelectorAll('.tab-content');
@@ -117,3 +138,8 @@ copyButtons.forEach(button => {
         });
     });
 });
+
+// Initialize
+setProfilePicture();
+generateNostrQR();
+generateLightningQR();
