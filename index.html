@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="bundle.js" defer></script>
     <style>
         /* Add verification badge styling */
@@ -75,6 +76,141 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+        }
+
+        /* QR Code Overlay Styles - Primal inspired */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .overlay-content {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 16px;
+            position: relative;
+            max-width: 90%;
+            width: 380px;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-overlay {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.2s ease;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+
+        .close-overlay:hover {
+            color: #fff;
+        }
+
+        .tab-content {
+            text-align: center;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-container {
+            margin: 1rem 0 1.5rem;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-container img {
+            width: 200px;
+            height: 200px;
+        }
+
+        .nostr-info {
+            width: 100%;
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .address-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .truncated-address {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copy-button {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .copy-button:hover {
+            color: #fff;
+        }
+
+        .copy-button i {
+            font-size: 1.1rem;
+        }
+
+        .qr-button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .qr-button:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .overlay-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -131,7 +267,6 @@
                 <i class="fab fa-bandcamp" aria-hidden="true"></i>
                 <span>Bandcamp @nigilcaenaan</span>
             </a>
-            <hr aria-hidden="true">
             <a href="https://x.com/nigilcaenaan" 
                class="link-card" 
                target="_blank" 
@@ -140,6 +275,7 @@
                 <i class="fab fa-twitter" aria-hidden="true"></i>
                 <span>Social: @X.com</span>
             </a>
+            <hr aria-hidden="true">
             <a href="https://www.discogs.com/artist/55647-Nigil-Caenaan" 
                class="link-card" 
                target="_blank" 
@@ -162,56 +298,30 @@
             <button class="close-overlay" 
                     aria-label="Close QR code overlay">&times;</button>
             
-            <div class="tabs" role="tablist">
-                <button class="tab-button active" 
-                        role="tab"
-                        aria-selected="true"
-                        aria-controls="nostr-tab"
-                        data-tab="nostr">
-                    <i class="fas fa-bolt" aria-hidden="true"></i> Nostr
-                </button>
-                <button class="tab-button" 
-                        role="tab"
-                        aria-selected="false"
-                        aria-controls="lightning-tab"
-                        data-tab="lightning">
-                    <i class="fas fa-bolt" aria-hidden="true"></i> Lightning
-                </button>
-            </div>
-
-            <div class="tab-content active" 
+            <div class="tab-content" 
                  id="nostr-tab" 
                  role="tabpanel"
                  aria-labelledby="nostr-tab">
-                <h2>Nostr Profile</h2>
                 <div class="qr-container" aria-label="Nostr QR Code">
                     <div id="nostr-qrcode"></div>
                 </div>
                 <div class="nostr-info">
-                    <p class="nostr-npub">npub: <span id="nostrNpub"></span></p>
-                    <button class="copy-button" 
-                            data-copy="npub"
-                            aria-label="Copy Nostr npub">Copy npub</button>
-                    <p class="nostr-pubkey">Pubkey: <span id="nostrPubkey"></span></p>
-                    <button class="copy-button" 
-                            data-copy="pubkey"
-                            aria-label="Copy Nostr public key">Copy Pubkey</button>
-                </div>
-            </div>
-
-            <div class="tab-content" 
-                 id="lightning-tab" 
-                 role="tabpanel"
-                 aria-labelledby="lightning-tab">
-                <h2>Lightning Address</h2>
-                <div class="qr-container" aria-label="Lightning QR Code">
-                    <div id="lightning-qrcode"></div>
-                </div>
-                <div class="lightning-info">
-                    <p class="lightning-address">Address: <span id="lightningAddress"></span></p>
-                    <button class="copy-button" 
-                            data-copy="lightning"
-                            aria-label="Copy Lightning address">Copy Address</button>
+                    <div class="address-container">
+                        <span class="truncated-address" id="nostrNpub"></span>
+                        <button class="copy-button" 
+                                data-copy="npub"
+                                aria-label="Copy Nostr npub">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="address-container">
+                        <span class="truncated-address" id="nostrPubkey"></span>
+                        <button class="copy-button" 
+                                data-copy="pubkey"
+                                aria-label="Copy Nostr public key">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -253,6 +363,96 @@
         // Check verification on page load
         document.addEventListener('DOMContentLoaded', () => {
             checkVerification('nigilcaenaan.online', 'caenaan');
+        });
+    </script>
+    <script>
+        // QR Code functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const qrButton = document.querySelector('.qr-button');
+            const qrOverlay = document.getElementById('qrOverlay');
+            const closeButton = document.querySelector('.close-overlay');
+            const copyButtons = document.querySelectorAll('.copy-button');
+            
+            // Show QR overlay when QR button is clicked
+            qrButton.addEventListener('click', () => {
+                qrOverlay.style.display = 'flex';
+                qrOverlay.setAttribute('aria-hidden', 'false');
+                generateQRCodes();
+            });
+            
+            // Close overlay when close button is clicked
+            closeButton.addEventListener('click', () => {
+                qrOverlay.style.display = 'none';
+                qrOverlay.setAttribute('aria-hidden', 'true');
+            });
+            
+            // Close overlay when clicking outside the content
+            qrOverlay.addEventListener('click', (e) => {
+                if (e.target === qrOverlay) {
+                    qrOverlay.style.display = 'none';
+                    qrOverlay.setAttribute('aria-hidden', 'true');
+                }
+            });
+            
+            // Function to truncate address
+            function truncateAddress(address, start = 8, end = 8) {
+                if (!address) return '';
+                if (address.length <= start + end) return address;
+                return `${address.slice(0, start)}...${address.slice(-end)}`;
+            }
+            
+            // Generate QR codes function
+            function generateQRCodes() {
+                const npub = document.querySelector('#profile-image').getAttribute('data-npub');
+                const primalUrl = `https://primal.net/p/${npub}`;
+                
+                // Clear existing QR code
+                document.getElementById('nostr-qrcode').innerHTML = '';
+                
+                // Generate Nostr QR code with Primal URL
+                new QRCode(document.getElementById('nostr-qrcode'), {
+                    text: primalUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Update text fields with truncated addresses
+                document.getElementById('nostrNpub').textContent = truncateAddress(npub, 9, 8);
+                document.getElementById('nostrPubkey').textContent = truncateAddress(npub.slice(5), 8, 8); // Remove 'npub1' prefix
+            }
+            
+            // Copy button functionality
+            copyButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const type = button.getAttribute('data-copy');
+                    let textToCopy = '';
+                    
+                    switch(type) {
+                        case 'npub':
+                            textToCopy = document.querySelector('#profile-image').getAttribute('data-npub');
+                            break;
+                        case 'pubkey':
+                            textToCopy = document.querySelector('#profile-image').getAttribute('data-npub').slice(5);
+                            break;
+                    }
+                    
+                    try {
+                        await navigator.clipboard.writeText(textToCopy);
+                        const icon = button.querySelector('i');
+                        icon.classList.remove('fa-copy');
+                        icon.classList.add('fa-check');
+                        setTimeout(() => {
+                            icon.classList.remove('fa-check');
+                            icon.classList.add('fa-copy');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                    }
+                });
+            });
         });
     </script>
 </body>
