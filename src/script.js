@@ -26,11 +26,6 @@ function updateThemeIcon(theme) {
     themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
 }
 
-// Nostr and Lightning information
-const nostrPubkey = '12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx';
-const nostrNpub = nip19.npubEncode(nostrPubkey);
-const lightningAddress = 'nigilcaenaan@getalby.com';
-
 // Profile information from Nostr
 async function setProfileInfo() {
     const profileImage = document.getElementById('profile-image');
@@ -76,11 +71,18 @@ async function setProfileInfo() {
                 schemaData.description = bio;
                 schemaScript.textContent = JSON.stringify(schemaData, null, 4);
             }
+
+            // Update Nostr info display
+            document.getElementById('nostrNpub').textContent = npub;
+            document.getElementById('nostrPubkey').textContent = pubkey;
         }
     } catch (error) {
         console.error('Error fetching profile info:', error);
     }
 }
+
+// Lightning information
+const lightningAddress = 'nigilcaenaan@getalby.com';
 
 // Tab functionality
 const tabButtons = document.querySelectorAll('.tab-button');
@@ -108,8 +110,10 @@ tabButtons.forEach(button => {
 
 // Initialize QR codes
 function generateNostrQR() {
+    const profileImage = document.getElementById('profile-image');
+    const npub = profileImage.getAttribute('data-npub');
     const qr = qrcode(0, 'M');
-    qr.addData(`https://njump.me/${nostrNpub}`);
+    qr.addData(`https://njump.me/${npub}`);
     qr.make();
     document.getElementById('nostr-qrcode').innerHTML = qr.createImgTag(5);
 }
@@ -121,9 +125,7 @@ function generateLightningQR() {
     document.getElementById('lightning-qrcode').innerHTML = qr.createImgTag(5);
 }
 
-// Display information
-document.getElementById('nostrNpub').textContent = nostrNpub;
-document.getElementById('nostrPubkey').textContent = nostrPubkey;
+// Display lightning information
 document.getElementById('lightningAddress').textContent = lightningAddress;
 
 // Nostr QR Code functionality
