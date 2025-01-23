@@ -75,6 +75,36 @@ async function setProfileInfo() {
             // Update Nostr info display
             document.getElementById('nostrNpub').textContent = npub;
             document.getElementById('nostrPubkey').textContent = pubkey;
+
+            // Check for lightning address in metadata
+            let lightningAddress = null;
+            if (data.content.lud16) {
+                lightningAddress = data.content.lud16;
+            } else if (data.content.lud06) {
+                lightningAddress = data.content.lud06;
+            }
+
+            // Show/hide lightning tab based on presence of lightning address
+            const lightningTab = document.querySelector('[data-tab="lightning"]');
+            const lightningTabContent = document.getElementById('lightning-tab');
+            if (lightningAddress) {
+                document.getElementById('lightningAddress').textContent = lightningAddress;
+                lightningTab?.classList.remove('hidden');
+                lightningTabContent?.classList.remove('hidden');
+            } else {
+                lightningTab?.classList.add('hidden');
+                lightningTabContent?.classList.add('hidden');
+                // If lightning tab is active, switch to nostr tab
+                if (lightningTab?.classList.contains('active')) {
+                    lightningTab.classList.remove('active');
+                    lightningTabContent?.classList.remove('active');
+                    const nostrTab = document.querySelector('[data-tab="nostr"]');
+                    const nostrTabContent = document.getElementById('nostr-tab');
+                    nostrTab?.classList.add('active');
+                    nostrTabContent?.classList.add('active');
+                    generateNostrQR();
+                }
+            }
         }
     } catch (error) {
         console.error('Error fetching profile info:', error);
@@ -103,8 +133,9 @@ function generateLightningQR() {
 
 // Initialize everything after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Display lightning information
-    document.getElementById('lightningAddress').textContent = lightningAddress;
+    // Initialize profile and QR codes first
+    setProfileInfo();
+    generateNostrQR();
 
     // Tab functionality
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -112,6 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Skip if tab is hidden
+            if (button.classList.contains('hidden')) return;
+
             // Remove active class from all buttons and contents
             tabButtons.forEach(btn => btn.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
@@ -140,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     qrButton.addEventListener('click', () => {
         overlay.classList.add('active');
         // Generate QR code for active tab
-        const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+        const activeTab = document.querySelector('.tab-button.active')?.dataset.tab || 'nostr';
         if (activeTab === 'nostr') {
             generateNostrQR();
         } else {
@@ -183,9 +217,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-
-    // Initialize profile and QR codes
-    setProfileInfo();
-    generateNostrQR();
-    generateLightningQR();
 });
