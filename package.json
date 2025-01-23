@@ -1,7 +1,7 @@
 {
-  "name": "website-vveerrgg.online",
+  "name": "website-nigilcaenaan.online",
   "version": "1.0.0",
-  "description": "A modern, responsive \"link-in-bio\" style landing page for vveerrgg.online.",
+  "description": "A modern, responsive \"link-in-bio\" style landing page for nigilcaenaan.online.",
   "main": "src/script.js",
   "scripts": {
     "build": "webpack",

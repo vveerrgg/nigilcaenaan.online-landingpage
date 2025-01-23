@@ -1,6 +1,6 @@
 import qrcode from 'qrcode-generator';
 import { Buffer } from 'buffer';
-import { npubEncode } from 'nostr-crypto-utils';
+import { nip19 } from 'nostr-crypto-utils';
 window.Buffer = Buffer;
 
 // Theme toggle functionality
@@ -28,8 +28,8 @@ function updateThemeIcon(theme) {
 
 // Nostr and Lightning information
 const nostrPubkey = '12xyl6w6aacmqa3gmmzwrr9m3u0ldx3dwqhczuascswvew9am9q4sfg99cx';
-const nostrNpub = npubEncode(nostrPubkey);
-const lightningAddress = 'vveerrgg@getalby.com';
+const nostrNpub = nip19.npubEncode(nostrPubkey);
+const lightningAddress = 'nigilcaenaan@getalby.com';
 
 // Tab functionality
 const tabButtons = document.querySelectorAll('.tab-button');

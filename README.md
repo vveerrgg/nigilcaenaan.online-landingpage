@@ -1,4 +1,4 @@
-# vveerrgg.online Landing Page
+# nigilcaenaan.online Landing Page
 
 A modern, responsive "link-in-bio" style landing page with integrated Nostr and Lightning Network support.
 
@@ -26,8 +26,8 @@ A modern, responsive "link-in-bio" style landing page with integrated Nostr and 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/vveerrgg/vveerrgg.online-landingpage.git
-cd vveerrgg.online-landingpage
+git clone https://github.com/nigilcaenaan/nigilcaenaan.online-landingpage.git
+cd nigilcaenaan.online-landingpage
 ```
 
 2. Install dependencies:
@@ -111,11 +111,11 @@ MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Author
 
-[@vveerrgg](https://github.com/vveerrgg)
+[@nigilcaenaan](https://github.com/nigilcaenaan)
 
 ## Links
 
-- GitHub: [vveerrgg](https://github.com/vveerrgg)
-- Nostr: [vveerrgg](https://primal.net/vveerrgg)
-- Website: [vveerrgg.online](https://vveerrgg.online)
-- Articles: [HumanJava](https://www.humanjava.com/author/vveerrgg/)
+- GitHub: [nigilcaenaan](https://github.com/nigilcaenaan)
+- Nostr: [nigilcaenaan](https://primal.net/nigilcaenaan)
+- Website: [nigilcaenaan.online](https://nigilcaenaan.online)
+- Articles: [HumanJava](https://www.humanjava.com/author/nigilcaenaan/)
