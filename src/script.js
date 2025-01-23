@@ -84,30 +84,6 @@ async function setProfileInfo() {
 // Lightning information
 const lightningAddress = 'nigilcaenaan@getalby.com';
 
-// Tab functionality
-const tabButtons = document.querySelectorAll('.tab-button');
-const tabContents = document.querySelectorAll('.tab-content');
-
-tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        // Remove active class from all buttons and contents
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-
-        // Add active class to clicked button and corresponding content
-        button.classList.add('active');
-        const tabId = `${button.dataset.tab}-tab`;
-        document.getElementById(tabId).classList.add('active');
-
-        // Generate QR code for active tab
-        if (button.dataset.tab === 'nostr') {
-            generateNostrQR();
-        } else {
-            generateLightningQR();
-        }
-    });
-});
-
 // Initialize QR codes
 function generateNostrQR() {
     const profileImage = document.getElementById('profile-image');
@@ -125,53 +101,91 @@ function generateLightningQR() {
     document.getElementById('lightning-qrcode').innerHTML = qr.createImgTag(5);
 }
 
-// Display lightning information
-document.getElementById('lightningAddress').textContent = lightningAddress;
+// Initialize everything after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Display lightning information
+    document.getElementById('lightningAddress').textContent = lightningAddress;
 
-// Nostr QR Code functionality
-const qrButton = document.querySelector('.qr-button');
-const overlay = document.getElementById('qrOverlay');
-const closeOverlay = document.querySelector('.close-overlay');
-const copyButtons = document.querySelectorAll('.copy-button');
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-// Show overlay
-qrButton.addEventListener('click', () => {
-    overlay.classList.add('active');
-    // Generate QR code for active tab
-    const activeTab = document.querySelector('.tab-button.active').dataset.tab;
-    if (activeTab === 'nostr') {
-        generateNostrQR();
-    } else {
-        generateLightningQR();
-    }
-});
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
 
-// Hide overlay
-closeOverlay.addEventListener('click', () => {
-    overlay.classList.remove('active');
-});
+            // Add active class to clicked button and corresponding content
+            button.classList.add('active');
+            const tabId = `${button.dataset.tab}-tab`;
+            document.getElementById(tabId).classList.add('active');
 
-overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-        overlay.classList.remove('active');
-    }
-});
-
-// Copy functionality
-copyButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const textToCopy = button.previousElementSibling.textContent;
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            const originalText = button.textContent;
-            button.textContent = 'Copied!';
-            setTimeout(() => {
-                button.textContent = originalText;
-            }, 2000);
+            // Generate QR code for active tab
+            if (button.dataset.tab === 'nostr') {
+                generateNostrQR();
+            } else {
+                generateLightningQR();
+            }
         });
     });
-});
 
-// Initialize
-setProfileInfo();
-generateNostrQR();
-generateLightningQR();
+    // Nostr QR Code functionality
+    const qrButton = document.querySelector('.qr-button');
+    const overlay = document.getElementById('qrOverlay');
+    const closeOverlay = document.querySelector('.close-overlay');
+    const copyButtons = document.querySelectorAll('.copy-button');
+
+    // Show overlay
+    qrButton.addEventListener('click', () => {
+        overlay.classList.add('active');
+        // Generate QR code for active tab
+        const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+        if (activeTab === 'nostr') {
+            generateNostrQR();
+        } else {
+            generateLightningQR();
+        }
+    });
+
+    // Hide overlay
+    closeOverlay.addEventListener('click', () => {
+        overlay.classList.remove('active');
+    });
+
+    // Click outside to close
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove('active');
+        }
+    });
+
+    // Copy button functionality
+    copyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const type = button.dataset.copy;
+            let textToCopy = '';
+            
+            if (type === 'npub') {
+                textToCopy = document.getElementById('nostrNpub').textContent;
+            } else if (type === 'pubkey') {
+                textToCopy = document.getElementById('nostrPubkey').textContent;
+            } else if (type === 'lightning') {
+                textToCopy = document.getElementById('lightningAddress').textContent;
+            }
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        });
+    });
+
+    // Initialize profile and QR codes
+    setProfileInfo();
+    generateNostrQR();
+    generateLightningQR();
+});
