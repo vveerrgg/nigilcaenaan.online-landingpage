@@ -40,9 +40,16 @@ async function setProfileInfo() {
         const data = await response.json();
         
         if (data.content) {
-            // Set profile picture
+            // Set profile picture and update all image references
             if (data.content.picture) {
-                profileImage.src = `https://primal.b-cdn.net/media-cache?s=m&a=1&u=${encodeURIComponent(data.content.picture)}`;
+                const profileImageUrl = `https://primal.b-cdn.net/media-cache?s=m&a=1&u=${encodeURIComponent(data.content.picture)}`;
+                profileImage.src = profileImageUrl;
+                
+                // Update meta tags with the new image
+                document.querySelector('meta[property="og:image"]').content = profileImageUrl;
+                document.querySelector('meta[property="twitter:image"]').content = profileImageUrl;
+                document.querySelector('link[rel="icon"]').href = profileImageUrl;
+                document.querySelector('link[rel="apple-touch-icon"]').href = profileImageUrl;
             }
 
             // Set display name and username
